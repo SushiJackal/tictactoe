@@ -4,7 +4,6 @@ const http = require('http')
 const express = require('express')
 const app = express()
 const websocket = require('websocket').server
-const { readSync } = require('fs')
 const httpServer = http.createServer()
 
 app.use(express.static(path.join(__dirname, '../client')))
