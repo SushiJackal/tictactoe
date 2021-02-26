@@ -11,17 +11,23 @@
 <body>
   <div id="wrapper">
     <div id="game">
-      <div class="cell" id="a1"></div>
-      <div class="cell" id="a2"></div>
-      <div class="cell" id="a3"></div>
+      <div onclick="cellClick('a1')" class="cell" id="a1"></div>
+      <div onclick="cellClick('a2')" class="cell" id="a2"></div>
+      <div onclick="cellClick('a3')" class="cell" id="a3"></div>
 
-      <div class="cell" id="b1"></div>
-      <div class="cell" id="b2"></div>
-      <div class="cell" id="b3"></div>
+      <div class="hline" id="hline1"></div>
+      <div class="vline" id="vline1"></div>
 
-      <div class="cell" id="c1"></div>
-      <div class="cell" id="c2"></div>
-      <div class="cell" id="c3"></div>
+      <div onclick="cellClick('b1')" class="cell" id="b1"></div>
+      <div onclick="cellClick('b2')" class="cell" id="b2"></div>
+      <div onclick="cellClick('b3')" class="cell" id="b3"></div>
+
+      <div class="hline" id="hline2"></div>
+      <div class="vline" id="vline2"></div>
+      
+      <div onclick="cellClick('c1')" class="cell" id="c1"></div>
+      <div onclick="cellClick('c2')" class="cell" id="c2"></div>
+      <div onclick="cellClick('c3')" class="cell" id="c3"></div>
     </div>
   </div>
   <div id="copyright">

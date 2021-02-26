@@ -69,6 +69,35 @@ body{
   }
 }
 
+.hline {
+  background-color: white;
+  border-radius: 100px;
+  grid-column-start: 1;
+  grid-column-end: span 5;
+}
+
+.vline {
+  background-color: white;
+  border-radius: 100px;
+  grid-row-start: 1;
+  grid-row-end: span 5;
+}
+
+#hline1 {
+  grid-row: 2;
+}
+
+#hline2 {
+  grid-row: 4;
+}
+
+#vline1 {
+  grid-column: 2;
+}
+
+#vline2 {
+  grid-column: 4;
+}
 
 #a1 {
   grid-row: 1;
