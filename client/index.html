@@ -5,11 +5,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <script src="comms.js"></script>
   <title>Tic Tac Toe</title>
 </head>
 <body>
   <div id="wrapper">
+    <div id="loading">
+      <img src="loading.png" alt="Loading...">
+    </div>
     <div id="game">
       <div onclick="cellClick('a1')" class="cell" id="a1"></div>
       <div onclick="cellClick('a2')" class="cell" id="a2"></div>
@@ -33,5 +35,7 @@
   <div id="copyright">
     <p>Made with ❤ by Sushi⠀•⠀©2021</p>
   </div>
+  <script src="game.js"></script>
+  <script src="comms.js"></script>
 </body>
 </html>
