@@ -26,24 +26,68 @@ wsServer.on("request", req => {
     const res = JSON.parse(msg.utf8Data)
 
     if(res.action === 'create') {
-      console.log('Creating game...')
+      clientID = res.clientID
+
+      if(!clients[clientID]){
+        return
+      }
+
+      gameID = md5(Date.now())
+      games[gameID] = {clients: {}}
+      games[gameID].clients[clientID] = clientID
+
+      console.log(`Created game with ID ${gameID} and host client ${clientID}!`)
+      console.log(games)
+
+      payload = {
+        action: 'lobby',
+        gameID: gameID,
+        player: 1 //needs game state
+      }
+
+      con.send(JSON.stringify(payload))
     }
 
     if(res.action === 'join') {
       gameID = res.gameID
-      console.log(`Joining game with ID ${gameID}`)
+      clientID = res.clientID
+
+      if(!games[gameID]){
+        console.log(`Couldn't join game with ID ${gameID}!`)
+      } else {
+        if(!games[gameID].clients) {
+          return
+        }
+        if(!clients[clientID]) {
+          return
+        }
+        if(Object.keys(games[gameID].clients).length === 2){
+          console.log(`Game with ID ${gameID} is full!`)
+        } else {
+          games[gameID].clients[clientID] = clientID
+          console.log(games)
+        }
+      }
+
+      payload = {
+        action: 'lobby',
+        gameID: gameID,
+        player: 2 //needs game state later
+      }
+
+      con.send(JSON.stringify(payload))
     }
   })
 
-  const clientID = md5(Date.now())
-  clients[clientID] = {
+  const clID = md5(Date.now())
+  clients[clID] = {
     con: con
   }
 
-  const payload = {
+  pl = {
     action: "login",
-    clientID: clientID
+    clientID: clID
   }
 
-  con.send(JSON.stringify(payload))
+  con.send(JSON.stringify(pl))
 })

@@ -32,4 +32,24 @@ ws.onmessage = message => {
     console.log(payload)
     ws.send(JSON.stringify(payload))
   }
+
+  if(res.action === 'lobby'){
+    if(res.player === 1){
+      console.log('I am player 1!')
+    } else {
+      console.log('I am player 2!')
+    }
+    gameStart()
+  }
+}
+
+function cellClick(cell) {
+  payload = {
+    action: 'play',
+    clientID: clientID,
+    gameID: gameID,
+    cell: cell
+  }
+  console.log(payload)
+  ws.send(JSON.stringify(payload))
 }
