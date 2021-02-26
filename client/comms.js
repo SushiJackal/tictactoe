@@ -35,9 +35,9 @@ ws.onmessage = message => {
 
   if(res.action === 'lobby'){
     if(res.player === 1){
-      console.log('I am player 1!')
+      console.log(`I am player 1 with symbol ${res.symbol}!`)
     } else {
-      console.log('I am player 2!')
+      console.log(`I am player 2 with symbol ${res.symbol}!`)
     }
     gameStart()
   }

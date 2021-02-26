@@ -32,9 +32,18 @@ wsServer.on("request", req => {
         return
       }
 
+      let taken = (() => {
+        if(Math.random() <= 0.5) {
+          return 'cross'
+        } else {
+          return 'circle'
+        }
+      })()
+
       gameID = md5(Date.now())
       games[gameID] = {clients: {}}
       games[gameID].clients[clientID] = clientID
+      games[gameID].taken = taken
 
       console.log(`Created game with ID ${gameID} and host client ${clientID}!`)
       console.log(games)
@@ -42,6 +51,7 @@ wsServer.on("request", req => {
       payload = {
         action: 'lobby',
         gameID: gameID,
+        symbol: taken,
         player: 1 //needs game state
       }
 
@@ -69,10 +79,17 @@ wsServer.on("request", req => {
         }
       }
 
+      if(games[gameID].taken === 'cross') {
+        var free = 'circle'
+      } else {
+        var free = 'cross'
+      }
+
       payload = {
         action: 'lobby',
         gameID: gameID,
-        player: 2 //needs game state later
+        symbol: free,
+        player: 2 //needs game state
       }
 
       con.send(JSON.stringify(payload))
