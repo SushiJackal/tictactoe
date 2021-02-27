@@ -6,7 +6,7 @@ if(url.indexOf('?game=') === -1) {
   gameID = url.substring(url.indexOf('?game=') + 6)
 }
 
-let ws = new WebSocket("ws://localhost:80")
+let ws = new WebSocket(`wss://${location.hostname}:8080${location.pathname}`)
 
 let clientID = null;
 

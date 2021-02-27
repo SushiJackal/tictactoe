@@ -1,18 +1,23 @@
 const md5 = require('md5')
 const path = require('path')
-const http = require('http')
+const https = require('https')
 const express = require('express')
 const app = express()
 const websocket = require('websocket').server
-const httpServer = http.createServer()
+const fs = require('fs')
+
+const key = fs.readFileSync(path.join(__dirname, `ssl/${process.argv[2]}-key.pem`), 'utf-8')
+const cert = fs.readFileSync(path.join(__dirname, `./ssl/${process.argv[2]}.pem`), 'utf-8')
+const creds = {key: key, cert:cert}
 
 app.use(express.static(path.join(__dirname, '../client')))
 
-httpServer.listen(80, () => console.log('Listening on port 80...'))
-app.listen(443, () => console.log('Listening on port 443...'))
+const httpsServer = https.createServer(creds, app)
+httpsServer.listen(8080, () => console.log('Listening on port 8080...'))
+app.listen(8081, () => console.log('Listening on port 8081...'))
 
 const wsServer = new websocket({
-  "httpServer" : httpServer
+  "httpServer" : httpsServer
 })
 
 const clients = {}
