@@ -78,6 +78,7 @@ wsServer.on("request", req => {
         }
         if(Object.keys(games[gameID].clients).length === 2){
           console.log(`Game with ID ${gameID} is full!`)
+          return
         } else {
           games[gameID].clients[clientID] = clientID
           console.log(games)
