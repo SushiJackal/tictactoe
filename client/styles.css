@@ -36,6 +36,21 @@ body{
   animation: LoadRotate 1s linear infinite;
 }
 
+#error {
+  grid-column: 2;
+  align-self: center;
+  justify-self: center;
+  width: 100%;
+  display: none;
+}
+
+#error h1 {
+  color: #ff443a;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 6vw;
+  text-align: center;
+}
+
 #game {
   z-index: 1;
   grid-row: 2;
@@ -63,7 +78,11 @@ body{
   
   #wrapper{
     grid-template-columns: auto 420px auto;
-    grid-template-rows: 13% 420px auto;
+    grid-template-rows: 15% 420px auto;
+  }
+
+  #error h1 {
+    font-size: 3.5vw;
   }
 }
 @media screen and (min-width: 1024px) {
@@ -73,7 +92,11 @@ body{
 
   #wrapper{
     grid-template-columns: auto 640px auto;
-    grid-template-rows: 14% 640px auto;
+    grid-template-rows: 17% 640px auto;
+  }
+
+  #error h1 {
+    font-size: 2vw;
   }
 }
 @media screen and (min-width: 1921px) {
@@ -83,7 +106,11 @@ body{
 
   #wrapper{
     grid-template-columns: auto 1000px auto;
-    grid-template-rows: 14% 1000px auto;
+    grid-template-rows: 17% 1000px auto;
+  }
+
+  #error h1 {
+    font-size: 2.5vw;
   }
 }
 

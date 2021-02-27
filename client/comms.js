@@ -9,6 +9,12 @@ if(url.indexOf('?game=') === -1) {
 let ws = new WebSocket(`wss://${location.hostname}:8080${location.pathname}`)
 
 let clientID = null;
+let validErrors = [
+  'Session token invalid!',
+  'Game not found!',
+  'No host client in this game!',
+  'Game is full!'
+]
 
 
 ws.onmessage = message => {
@@ -40,6 +46,12 @@ ws.onmessage = message => {
       console.log(`I am player 2 with symbol ${res.symbol}!`)
     }
     gameStart()
+  } //switch case? ALSO NEEDS CHECKING WHETHER INFORMATION IS ACTUALLY PRESENT ON BOTH CLIENT AND SERVER (what if res.player undefined?)
+
+  if(res.action === 'error'){
+    if(validErrors.includes(res.error)){
+      handleError(res.error)
+    }
   }
 }
 
@@ -52,4 +64,11 @@ function cellClick(cell) {
   }
   console.log(payload)
   ws.send(JSON.stringify(payload))
+}
+
+function handleError(err) {
+  container = document.getElementById('error')
+  panel = document.getElementById('panel')
+  panel.innerHTML = err
+  container.style.display = 'block'
 }
