@@ -34,6 +34,11 @@ wsServer.on("request", req => {
       clientID = res.clientID
 
       if(!clients[clientID]){
+        payload = {
+          action: 'error',
+          error: 'Session token invalid!'
+        }
+        con.send(JSON.stringify(payload))
         return
       }
 
@@ -51,7 +56,6 @@ wsServer.on("request", req => {
       games[gameID].taken = taken
 
       console.log(`Created game with ID ${gameID} and host client ${clientID}!`)
-      console.log(games)
 
       payload = {
         action: 'lobby',
@@ -69,19 +73,40 @@ wsServer.on("request", req => {
 
       if(!games[gameID]){
         console.log(`Couldn't join game with ID ${gameID}!`)
+        payload = {
+          action: 'error',
+          error: 'Game not found!'
+        }
+        con.send(JSON.stringify(payload))
+        return
       } else {
         if(!games[gameID].clients) {
+          payload = {
+            action: 'error',
+            error: 'No host client in this game!'
+          }
+          con.send(JSON.stringify(payload))
           return
         }
         if(!clients[clientID]) {
+          payload = {
+            action: 'error',
+            error: 'Session token invalid!'
+          }
+          con.send(JSON.stringify(payload))
           return
         }
         if(Object.keys(games[gameID].clients).length === 2){
           console.log(`Game with ID ${gameID} is full!`)
+          payload = {
+            action: 'error',
+            error: 'Game is full!'
+          }
+          con.send(JSON.stringify(payload))
           return
         } else {
           games[gameID].clients[clientID] = clientID
-          console.log(games)
+          console.log(`Joining game with ID ${gameID}!`)
         }
       }
 
@@ -99,7 +124,7 @@ wsServer.on("request", req => {
       }
 
       con.send(JSON.stringify(payload))
-    }
+    } //switch case?
   })
 
   const clID = md5(Date.now())
