@@ -8,7 +8,7 @@ const fs = require('fs')
 
 const key = fs.readFileSync(path.join(__dirname, `ssl/localhost-key.pem`), 'utf-8')
 const cert = fs.readFileSync(path.join(__dirname, `./ssl/localhost.pem`), 'utf-8')
-const creds = {key: key, cert:cert}
+const creds = {key: key, cert: cert}
 
 app.use(express.static(path.join(__dirname, '../client')))
 
