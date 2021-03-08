@@ -45,6 +45,7 @@ ws.onmessage = message => {
     } else {
       console.log(`I am player 2 with symbol ${res.symbol}!`)
     }
+    gameID = res.gameID
     gameStart()
   } //switch case? ALSO NEEDS CHECKING WHETHER INFORMATION IS ACTUALLY PRESENT ON BOTH CLIENT AND SERVER (what if res.player undefined?)
 
