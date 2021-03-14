@@ -1,12 +1,11 @@
 const url = window.location.href
+const ws = io(`https://${location.hostname}:8080${location.pathname}`)
 
 if(url.indexOf('?game=') === -1) {
   gameID = ''
 } else {
   gameID = url.substring(url.indexOf('?game=') + 6)
 }
-
-let ws = new WebSocket(`wss://${location.hostname}:8080${location.pathname}`)
 
 let clientID = null;
 let validErrors = [
@@ -16,9 +15,8 @@ let validErrors = [
   'Game is full!'
 ]
 
-
-ws.onmessage = message => {
-  const res = JSON.parse(message.data)
+ws.on('message', message => {
+  const res = JSON.parse(message)
 
   if(res.action === 'login') {
     clientID = res.clientID
@@ -54,7 +52,7 @@ ws.onmessage = message => {
       handleError(res.error)
     }
   }
-}
+})
 
 function cellClick(cell) {
   payload = {

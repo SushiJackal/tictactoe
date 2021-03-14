@@ -1,34 +1,32 @@
 const md5 = require('md5')
 const path = require('path')
-const https = require('https')
 const express = require('express')
 const app = express()
-const websocket = require('websocket').server
 const fs = require('fs')
 
 const key = fs.readFileSync(path.join(__dirname, `ssl/localhost-key.pem`), 'utf-8')
 const cert = fs.readFileSync(path.join(__dirname, `ssl/localhost.pem`), 'utf-8')
 const creds = {key: key, cert: cert}
 
-app.use(express.static(path.join(__dirname, '../client')))
-
-const httpsServer = https.createServer(creds, app)
-httpsServer.listen(8080, () => console.log('Listening on port 8080...'))
-app.listen(8081, () => console.log('Listening on port 8081...'))
-
-const wsServer = new websocket({
-  "httpServer" : httpsServer
+const server = require('https').createServer(creds, app)
+const io = require('socket.io')(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET"]
+  }
 })
 
+app.use(express.static(path.join(__dirname, '../client')))
+
+server.listen(8080, () => console.log('Listening on port 8080...'))
+
+
 const clients = {}
-const games = {}
+const games = {} //LOOK INTO SOCKET.IO ROOMS?
 
-
-wsServer.on("request", req => {
-  const con = req.accept(null, req.origin)
-
-  con.on("message", msg => {
-    const res = JSON.parse(msg.utf8Data)
+io.on("connection", socket => {
+  socket.on("message", msg => {
+    const res = JSON.parse(msg)
 
     if(res.action === 'create') {
       clientID = res.clientID
@@ -38,7 +36,7 @@ wsServer.on("request", req => {
           action: 'error',
           error: 'Session token invalid!'
         }
-        con.send(JSON.stringify(payload))
+        socket.send(JSON.stringify(payload))
         return
       }
 
@@ -64,7 +62,7 @@ wsServer.on("request", req => {
         player: 1 //needs game state
       }
 
-      con.send(JSON.stringify(payload))
+      socket.send(JSON.stringify(payload))
     }
 
     if(res.action === 'join') {
@@ -77,7 +75,7 @@ wsServer.on("request", req => {
           action: 'error',
           error: 'Game not found!'
         }
-        con.send(JSON.stringify(payload))
+        socket.send(JSON.stringify(payload))
         return
       } else {
         if(!games[gameID].clients) {
@@ -85,7 +83,7 @@ wsServer.on("request", req => {
             action: 'error',
             error: 'No host client in this game!'
           }
-          con.send(JSON.stringify(payload))
+          socket.send(JSON.stringify(payload))
           return
         }
         if(!clients[clientID]) {
@@ -93,7 +91,7 @@ wsServer.on("request", req => {
             action: 'error',
             error: 'Session token invalid!'
           }
-          con.send(JSON.stringify(payload))
+          socket.send(JSON.stringify(payload))
           return
         }
         if(Object.keys(games[gameID].clients).length === 2){
@@ -102,7 +100,7 @@ wsServer.on("request", req => {
             action: 'error',
             error: 'Game is full!'
           }
-          con.send(JSON.stringify(payload))
+          socket.send(JSON.stringify(payload))
           return
         } else {
           games[gameID].clients[clientID] = clientID
@@ -123,13 +121,13 @@ wsServer.on("request", req => {
         player: 2 //needs game state
       }
 
-      con.send(JSON.stringify(payload))
+      socket.send(JSON.stringify(payload))
     } //switch case?
   })
 
   const clID = md5(Date.now())
   clients[clID] = {
-    con: con
+    con: socket.id
   }
 
   pl = {
@@ -137,5 +135,5 @@ wsServer.on("request", req => {
     clientID: clID
   }
 
-  con.send(JSON.stringify(pl))
+  socket.send(JSON.stringify(pl))
 })
