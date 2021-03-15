@@ -1,5 +1,7 @@
 const url = window.location.href
-const ws = io(`https://${location.hostname}:8080${location.pathname}`)
+const ws = io(`https://${location.hostname}:8080`, {
+  location: '/tictactoe'
+})
 
 if(url.indexOf('?game=') === -1) {
   gameID = ''

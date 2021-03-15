@@ -16,7 +16,7 @@ const io = require('socket.io')(server, {
   }
 })
 
-app.use(express.static(path.join(__dirname, '../client')))
+app.use(express.static(path.join(__dirname, '../client')))//NEEDS TO BE '..' ON SERVER!!!!
 
 server.listen(8080, () => console.log('Listening on port 8080...'))
 
