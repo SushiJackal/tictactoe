@@ -16,7 +16,16 @@ const io = require('socket.io')(server, {
   }
 })
 
-app.use(express.static(path.join(__dirname, '../client')))//NEEDS TO BE '..' ON SERVER!!!!
+var clientPath;
+
+try{
+  fs.readFileSync(path.join(__dirname, `../client/index.html`));
+  clientPath = '../client'
+} catch {
+  clientPath = '..'
+}
+
+app.use(express.static(path.join(__dirname, clientPath)))
 
 server.listen(8080, () => console.log('Listening on port 8080...'))
 
